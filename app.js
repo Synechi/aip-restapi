@@ -5,6 +5,7 @@ var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 var mongoose = require("mongoose");
 var bodyparser = require("body-parser");
+var cors = require("cors");
 
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
@@ -24,6 +25,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 //Using bodyparser to parse json data
 app.use(bodyparser.json());
+//Cross origin resource sharing middleware
+app.use(cors());
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
