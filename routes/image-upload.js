@@ -29,7 +29,7 @@ router.post('/save-url', function(req, res) {
   newImage.save((err, Image) => {
     if (err) {
       return res.status(400).send({
-        message: "Failed to add image",
+        message: newImage.username,
         success: false
       });
     } else {
