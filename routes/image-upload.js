@@ -5,8 +5,9 @@ const express = require("express");
 const router = express.Router();
 
 const upload = require('../services/image-upload');
-
 const singleUpload = upload.single('image');
+
+const Image = require("../models/image")
 
 router.post('/image-upload', function(req, res) {
 
@@ -17,6 +18,26 @@ router.post('/image-upload', function(req, res) {
     }
 
     return res.json({'imageUrl': req.file.location});
+  });
+});
+
+router.post('/save-url', function(req, res) {
+  let newImage = new Image();
+  newImage.username = req.body.username;
+  newImage.imageUrl = req.body.imageUrl;
+
+  newImage.save((err, Image) => {
+    if (err) {
+      return res.status(400).send({
+        message: "Failed to add image",
+        success: false
+      });
+    } else {
+      return res.status(201).send({
+        message: "Image added",
+        success: true
+      });
+    }
   });
 });
 
