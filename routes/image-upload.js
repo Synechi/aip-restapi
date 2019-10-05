@@ -55,4 +55,30 @@ router.get("/get-all-images", (req, res) => {
   });
 });
 
+router.post("/delete-image", (req, res) => {
+  Image.deleteOne({imageUrl: req.body.imageUrl}, function(err) {
+    if (err) {
+      return res.status(422).send({errors: [{title: 'Failed to Delete', detail: err.message}] });
+    } else {
+      return res.status(201).send({
+        message: "Image Deleted",
+        success: true
+      });
+    }
+  });
+});
+
+router.post("/update-image", (req,res) => {
+  Image.updateOne({imageUrl: req.body.oldImageUrl}, {$set: {imageUrl: req.body.newImageUrl}}, function(err) {
+    if (err) {
+      return res.status(422).send({errors: [{title: 'Failed to Update Image', detail: err.message}] });
+    } else {
+      return res.status(201).send({
+        message: "Image added",
+        success: true
+      });
+    }
+  });
+});
+
 module.exports = router;
