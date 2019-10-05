@@ -41,4 +41,18 @@ router.post('/save-url', function(req, res) {
   });
 });
 
+router.get("/get-all-images", (req, res) => {
+
+  Image.find({}, function(err, images) {
+    if(images === null) {
+      return res.status(201).send({
+        message: "There are no images",
+        success: false
+      });
+    } else {
+      return res.json(images);  
+    }
+  });
+});
+
 module.exports = router;
