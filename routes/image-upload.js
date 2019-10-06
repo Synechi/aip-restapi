@@ -8,6 +8,7 @@ const upload = require('../services/image-upload');
 const singleUpload = upload.single('image');
 
 const Image = require("../models/image");
+const User = require("../models/user");
 
 router.post('/image-upload', function(req, res) {
 
@@ -33,6 +34,11 @@ router.post('/save-url', function(req, res) {
         success: false
       });
     } else {
+      User.updateOne({username: req.body.username}, {$inc: {numPosts: 1}}, function(err) {
+        if(err) {
+          return res.status(422).send({errors: [{title: 'Failed to increment numPost', detail: err.message}] });
+        }
+      });
       return res.status(201).send({
         message: "Image added",
         success: true

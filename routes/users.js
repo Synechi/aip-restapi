@@ -34,6 +34,7 @@ router.post("/signup", (req, res, next) => {
   let newAccount = new User();
   newAccount.username = req.body.username;
   newAccount.email = req.body.email;
+  newAccount.numPosts = 0;
   newAccount.setPassword(req.body.password);
   newAccount.save((err, User) => {
     if (err) {

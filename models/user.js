@@ -10,6 +10,10 @@ var UserSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  numPosts: {
+    type: Number,
+    required: true
+  },
   hash: String,
   salt: String
 });
