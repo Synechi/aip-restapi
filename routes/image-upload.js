@@ -7,7 +7,8 @@ const router = express.Router();
 const upload = require('../services/image-upload');
 const singleUpload = upload.single('image');
 
-const Image = require("../models/image")
+const Image = require("../models/image");
+const ResponseImage = require("../models/responseImage");
 
 router.post('/image-upload', function(req, res) {
 
@@ -29,7 +30,7 @@ router.post('/save-url', function(req, res) {
   newImage.save((err, Image) => {
     if (err) {
       return res.status(400).send({
-        message: newImage.username,
+        message: "Failed to save image",
         success: false
       });
     } else {
@@ -80,5 +81,30 @@ router.post("/update-image", (req,res) => {
     }
   });
 });
+
+router.post("/save-response-image-url", (req, res) => {
+  // Code made by Sanjay Achar from stackoverflow: https://stackoverflow.com/a/47103227
+  Image.findOne({imageUrl: req.body.parentImageUrl}, function(err, document) {
+    if(document) {
+      document.children.push({
+        username: req.body.username,
+        imageUrl: req.body.imageUrl,
+        chilren: {},
+      });
+
+      document.save(function(err) {
+        if (err) {
+          return res.status(422).send({errors: [{title: 'Failed add response image', detail: err.message}] });
+        } else {
+          return res.status(201).send({
+            message: "Image added",
+            success: true
+          });
+        }
+      });
+    }
+  });
+});
+
 
 module.exports = router;

@@ -9,6 +9,10 @@ var ImageSchema = new mongoose.Schema({
       type: String,
       required: true
     },
+    children: {
+      type: Array,
+      required: false
+    }
 });
 
 const Image = (module.exports = mongoose.model("Image", ImageSchema));
