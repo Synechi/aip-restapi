@@ -8,7 +8,6 @@ const upload = require('../services/image-upload');
 const singleUpload = upload.single('image');
 
 const Image = require("../models/image");
-const ResponseImage = require("../models/responseImage");
 
 router.post('/image-upload', function(req, res) {
 
