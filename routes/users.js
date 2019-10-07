@@ -51,11 +51,11 @@ router.post("/signup", (req, res, next) => {
   });
 });
 
-router.get("/get-all-images", (req, res) => {
-  User.find({}, function(err, images) {
+router.get("/get-all-users", (req, res) => {
+  User.find({}, function(err, users) {
     if(users === null) {
       return res.status(201).send({
-        message: "There are no images",
+        message: "There are no users",
         success: false
       });
     } else {
