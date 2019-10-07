@@ -27,6 +27,7 @@ router.post('/save-url', function(req, res) {
   newImage.username = req.body.username;
   newImage.imageUrl = req.body.imageUrl;
 
+
   newImage.save((err, Image) => {
     if (err) {
       return res.status(400).send({
@@ -66,6 +67,11 @@ router.post("/delete-image", (req, res) => {
     if (err) {
       return res.status(422).send({errors: [{title: 'Failed to Delete', detail: err.message}] });
     } else {
+      User.updateOne({username: req.body.username}, {$inc: {numPosts: -1}}, function(err) {
+        if(err) {
+          return res.status(422).send({errors: [{title: 'Failed to decrement numPost', detail: err.message}] });
+        }
+      });
       return res.status(201).send({
         message: "Image Deleted",
         success: true
@@ -86,6 +92,19 @@ router.post("/update-image", (req,res) => {
     }
   });
 });
+
+router.post("/replace-with-placeholder", (req,res) => {
+  Image.updateOne({imageUrl: req.body.oldImageUrl}, {$set: {imageUrl: "https://aip-project2019.s3.ap-southeast-2.amazonaws.com/1570419663723"}}, function(err) {
+    if (err) {
+      return res.status(422).send({errors: [{title: 'Failed to Replace Image', detail: err.message}] });
+    } else {
+      return res.status(201).send({
+        message: "Image added",
+        success: true
+      });
+    }
+  });
+})
 
 router.post("/save-response-image-url", (req, res) => {
   // Code made by Sanjay Achar from stackoverflow: https://stackoverflow.com/a/47103227

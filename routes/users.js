@@ -51,4 +51,18 @@ router.post("/signup", (req, res, next) => {
   });
 });
 
+router.get("/get-all-images", (req, res) => {
+  User.find({}, function(err, images) {
+    if(users === null) {
+      return res.status(201).send({
+        message: "There are no images",
+        success: false
+      });
+    } else {
+      return res.json(users);  
+    }
+  });
+});
+
+
 module.exports = router;

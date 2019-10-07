@@ -12,7 +12,7 @@ var ImageSchema = new mongoose.Schema({
     children: {
       type: Array,
       required: false
-    }
+    },
 });
 
 const Image = (module.exports = mongoose.model("Image", ImageSchema));
