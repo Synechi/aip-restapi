@@ -88,15 +88,12 @@ router.post("/update-image", (req,res) => {
 });
 
 router.post("/save-response-image-url", (req, res) => {
-
-
   // Code made by Sanjay Achar from stackoverflow: https://stackoverflow.com/a/47103227
   Image.findOne({imageUrl: req.body.parentImageUrl}, function(err, document) {
     if(document) {
       document.children.push({
         username: req.body.username,
         imageUrl: req.body.imageUrl,
-        children: [],
       });
 
       document.save(function(err) {
