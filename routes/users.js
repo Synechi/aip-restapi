@@ -40,7 +40,7 @@ router.post("/signup", (req, res, next) => {
     if (user === null) {
       newAccount.save((err, User) => {
         if (err) {
-          return res.status(400).send({
+          return res.status(201).send({
             message: "Failed to add user",
             success: false
           });
@@ -52,7 +52,7 @@ router.post("/signup", (req, res, next) => {
         }
       })
     } else {
-      return res.status(400).send({
+      return res.status(201).send({
         message: "Username Already Exits",
         success: false
       });
