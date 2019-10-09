@@ -36,6 +36,7 @@ router.post("/signup", (req, res, next) => {
   newAccount.email = req.body.email;
   newAccount.numPosts = 0;
   newAccount.setPassword(req.body.password);
+  newAccount.accountType = 0;
   User.findOne({ username: req.body.username }, function (err, user) {
     if (user === null) {
       newAccount.save((err, User) => {
