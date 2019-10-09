@@ -6,7 +6,7 @@ const User = require("../models/user");
 
 //User Login Endpoint
 router.post("/login", (req, res) => {
-  User.findOne({ username: req.body.username }, function(err, user) {
+  User.findOne({ username: req.body.username }, function (err, user) {
     if (user === null) {
       return res.status(201).send({
         message: "No matching user.",
@@ -36,30 +36,40 @@ router.post("/signup", (req, res, next) => {
   newAccount.email = req.body.email;
   newAccount.numPosts = 0;
   newAccount.setPassword(req.body.password);
-  newAccount.save((err, User) => {
-    if (err) {
+  User.findOne({ username: req.body.username }, function (err, user) {
+    if (user === null) {
+      newAccount.save((err, User) => {
+        if (err) {
+          return res.status(400).send({
+            message: "Failed to add user",
+            success: false
+          });
+        } else {
+          return res.status(201).send({
+            message: "User added",
+            success: true
+          });
+        }
+      })
+    } else {
       return res.status(400).send({
-        message: "Failed to add user",
+        message: "Username Already Exits",
         success: false
       });
-    } else {
-      return res.status(201).send({
-        message: "User added",
-        success: true
-      });
     }
-  });
+  }
+  );
 });
 
 router.get("/get-all-users", (req, res) => {
-  User.find({}, function(err, users) {
-    if(users === null) {
+  User.find({}, function (err, users) {
+    if (users === null) {
       return res.status(201).send({
         message: "There are no users",
         success: false
       });
     } else {
-      return res.json(users);  
+      return res.json(users);
     }
   });
 });
