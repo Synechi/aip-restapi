@@ -10,8 +10,8 @@ const singleUpload = upload.single('image');
 const Image = require("../models/image");
 const User = require("../models/user");
 
+// image upload end point
 router.post('/image-upload', function(req, res) {
-
   singleUpload(req, res, function(err) {
 
     if (err) {
@@ -22,11 +22,12 @@ router.post('/image-upload', function(req, res) {
   });
 });
 
+// Save Image Url endpoint
+// Images are saved in mongo with the image Url and user's usernam
 router.post('/save-url', function(req, res) {
   let newImage = new Image();
   newImage.username = req.body.username;
   newImage.imageUrl = req.body.imageUrl;
-
 
   newImage.save((err, Image) => {
     if (err) {
@@ -35,6 +36,7 @@ router.post('/save-url', function(req, res) {
         success: false
       });
     } else {
+      // If successfull the user's postNum in incremented by 1
       User.updateOne({username: req.body.username}, {$inc: {numPosts: 1}}, function(err) {
         if(err) {
           return res.status(422).send({errors: [{title: 'Failed to increment numPost', detail: err.message}] });
@@ -48,9 +50,11 @@ router.post('/save-url', function(req, res) {
   });
 });
 
+// Get all images end point
 router.get("/get-all-images", (req, res) => {
-
-  Image.find({}, function(err, images) {
+  
+  // Find and return all images in mongodb in JSON format
+  Image.find({}, function(err, images) {        
     if(images === null) {
       return res.status(201).send({
         message: "There are no images",
@@ -62,11 +66,15 @@ router.get("/get-all-images", (req, res) => {
   });
 });
 
+// Delete image endpoint 
 router.post("/delete-image", (req, res) => {
+
+  // Search and delete image in mongodb
   Image.deleteOne({imageUrl: req.body.imageUrl}, function(err) {
     if (err) {
       return res.status(422).send({errors: [{title: 'Failed to Delete', detail: err.message}] });
     } else {
+      // If successful the user's numPosts is decremented by 1
       User.updateOne({username: req.body.username}, {$inc: {numPosts: -1}}, function(err) {
         if(err) {
           return res.status(422).send({errors: [{title: 'Failed to decrement numPost', detail: err.message}] });
@@ -80,7 +88,10 @@ router.post("/delete-image", (req, res) => {
   });
 });
 
+// update image endpoint 
 router.post("/update-image", (req,res) => {
+
+  // Search and replace image url in mongodb
   Image.updateOne({imageUrl: req.body.oldImageUrl}, {$set: {imageUrl: req.body.newImageUrl}}, function(err) {
     if (err) {
       return res.status(422).send({errors: [{title: 'Failed to Update Image', detail: err.message}] });
@@ -93,7 +104,10 @@ router.post("/update-image", (req,res) => {
   });
 });
 
+// Replace with placeholder endpoint
 router.post("/replace-with-placeholder", (req,res) => {
+  
+  // Search and replace image url with hardcoded placeholder image url
   Image.updateOne({imageUrl: req.body.oldImageUrl}, {$set: {imageUrl: "https://aip-project2019.s3.ap-southeast-2.amazonaws.com/1570419663723"}}, function(err) {
     if (err) {
       return res.status(422).send({errors: [{title: 'Failed to Replace Image', detail: err.message}] });
@@ -106,8 +120,11 @@ router.post("/replace-with-placeholder", (req,res) => {
   });
 })
 
+// Save response image url endpoint
 router.post("/save-response-image-url", (req, res) => {
+
   // Code made by Sanjay Achar from stackoverflow: https://stackoverflow.com/a/47103227
+  // Search for parent image and push te response image data to the parent's children array
   Image.findOne({imageUrl: req.body.parentImageUrl}, function(err, document) {
     if(document) {
       document.children.push({
@@ -127,8 +144,6 @@ router.post("/save-response-image-url", (req, res) => {
       });
     }
   });
-
-
 });
 
 
