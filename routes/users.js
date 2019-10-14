@@ -63,7 +63,7 @@ router.post("/signup", (req, res, next) => {
 });
 
 router.get("/get-all-users", (req, res) => {
-  User.find({}, function (err, users) {
+  User.find({}, {username: 1, numPosts: 1, _id: 0}, function (err, users) {
     if (users === null) {
       return res.status(201).send({
         message: "There are no users",

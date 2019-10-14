@@ -13,7 +13,6 @@ const User = require("../models/user");
 // image upload end point
 router.post('/image-upload', function(req, res) {
   singleUpload(req, res, function(err) {
-
     if (err) {
       return res.status(422).send({errors: [{title: 'File Upload Error', detail: err.message}] });
     }
@@ -54,7 +53,7 @@ router.post('/save-url', function(req, res) {
 router.get("/get-all-images", (req, res) => {
   
   // Find and return all images in mongodb in JSON format
-  Image.find({}, function(err, images) {        
+  Image.find({}, {_id: 0}, function(err, images) {        
     if(images === null) {
       return res.status(201).send({
         message: "There are no images",
