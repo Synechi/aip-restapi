@@ -75,6 +75,7 @@ router.post("/delete-image", (req, res) => {
   var imageUrl = req.body.imageUrl
 
   // Retrieve the key at the end of the imageUrl and delete image from S3
+  // Url spliting trick by Dblock247 from: https://stackoverflow.com/a/40725409
   var imageKey = imageUrl.split("/").pop();
   imageMethods.deleteImage(imageKey, function(err) {
     if(err) {
