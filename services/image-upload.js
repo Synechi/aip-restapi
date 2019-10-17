@@ -1,4 +1,4 @@
-// Code from a tutorial made by Filip Jerga: https://www.youtube.com/watch?v=ASuU4km3VHE
+// Code made with a tutorial by Filip Jerga: https://www.youtube.com/watch?v=ASuU4km3VHE
 // Git repo containing code: https://github.com/Jerga99/book-with-me-ng/blob/master/server/services/file-upload.js
 
 var aws = require('aws-sdk');
@@ -26,6 +26,24 @@ const upload = multer({
       cb(null, Date.now().toString())         // Set file key to be the current date and time
     }
   })
-})
+});
 
-module.exports = upload;
+// Code by Alexander Paterson from: https://alexanderpaterson.com/posts/deleting-objects-from-amazon-s3-with-node
+deleteImage = function(filename, callback) {
+  var params = {
+    Bucket: 'aip-project2019',
+    Key: filename
+  };
+  s3.deleteObject(params, function(err, data) {         // Delete image from S3 using parameters
+    if(err) {
+      callback(err)
+    } else {
+      callback(null);
+    }
+  })
+}
+
+module.exports = {
+  upload, 
+  deleteImage
+};
