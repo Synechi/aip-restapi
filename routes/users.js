@@ -37,6 +37,7 @@ router.post("/signup", (req, res, next) => {
   newAccount.numPosts = 0;
   newAccount.setPassword(req.body.password);
   newAccount.accountType = 0;
+  // Checks to see if username already exists in collection.
   User.findOne({ username: req.body.username }, function (err, user) {
     if (user === null) {
       newAccount.save((err, User) => {
@@ -62,8 +63,9 @@ router.post("/signup", (req, res, next) => {
   );
 });
 
+//Return all users for the leaderbboard.
 router.get("/get-all-users", (req, res) => {
-  User.find({}, {username: 1, numPosts: 1, _id: 0}, function (err, users) {
+  User.find({}, { username: 1, numPosts: 1, _id: 0 }, function (err, users) {
     if (users === null) {
       return res.status(201).send({
         message: "There are no users",

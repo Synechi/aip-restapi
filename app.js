@@ -13,6 +13,7 @@ var imageRouter = require("./routes/image-upload");
 
 var app = express();
 
+// We used dotenv to hide database credentials behind a environmental variable, I will replace the reference on line 39 with the correct credential link for marking
 require("dotenv").config();
 
 // view engine setup
@@ -35,21 +36,22 @@ app.use("/", imageRouter);
 
 // Database connection setup
 
-mongoose.connect(process.env.URL);
+mongoose.connect("mongodb+srv://AIPAdmin:AIP2019@cluster0-m1byc.mongodb.net/aip-project?retryWrites=true&w=majority");
 
 var connection = mongoose.connection;
 
+//Console log to show connection to database successful
 connection.once("open", () => {
   console.log("Connection to MongoDB established successfully");
 });
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get("env") === "development" ? err : {};
